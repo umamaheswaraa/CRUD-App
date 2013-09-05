@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:context="http://www.springframework.org/schema/context"
+xmlns:tx="http://www.springframework.org/schema/tx"
+xmlns:aop="http://www.springframework.org/schema/aop"
+xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.1.xsd 
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-3.1.xsd
+	http://www.springframework.org/schema/tx
+	http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+
+<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath*:crud.properties</value>
+			</list>
+		</property>
+		<property name="ignoreResourceNotFound" value="true"/>
+		<property name="searchSystemEnvironment" value="true"/>
+</bean>
+	
+<tx:annotation-driven transaction-manager="transactionManager"/>
+
+<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+	<property name="entityManagerFactory" ref="entityManagerFactory" />
+</bean>
+
+<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"> 
+	<property name="dataSource" ref="dataSource" />
+	<property name="jpaVendorAdapter">
+		<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+				<property name="database" value="ORACLE" />
+				<property name="showSql" value="${hibernate.showSql}" />
+				<property name="generateDdl" value="${hibernate.generateDdl}" />
+		</bean>
+	</property>
+	<property name="jpaPropertyMap">
+		<map>
+			<entry key="hibernate.connection.driver_class" value="oracle.jdbc.driver.OracleDriver" />
+	        <entry key="hibernate.connection.url" value="${crud.jdbcurl}" />
+	        <entry key="hibernate.connection.username" value="${crud.dbuser}" />
+	        <entry key="hibernate.connection.password" value="${crud.dbpass}" />
+	        <entry key="hibernate.c3p0.min_size" value="${hibernate.c3p0.min_size}"/>
+	        <entry key="hibernate.c3p0.max_size" value="${hibernate.c3p0.max_size}"/>
+	        <entry key="hibernate.c3p0.timeout" value="${hibernate.c3p0.timeout}"/>   
+	        <entry key="hibernate.dialect" value="${hibernate.dialect}"/> 
+	        <entry key="hibernate.c3p0.max_statements" value="${hibernate.c3p0.max_statements}" />
+	        <entry key="hibernate.c3p0.breakAfterAcquireFailure" value="${hibernate.c3p0.breakAfterAcquireFailure}" />
+	        <entry key="hibernate.c3p0.acquireRetryAttempts" value="${hibernate.c3p0.acquireRetryAttempts}" />
+	        <entry key="hibernate.c3p0.acquireRetryDelay" value="${hibernate.c3p0.acquireRetryDelay}"/>
+		</map>
+	</property>
+	<property name="jpaDialect">
+      	<bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect"/>
+    </property>
+    <property name="persistenceUnitName" value="punit"></property>  
+</bean>
+
+<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${crud.driverClassName}" />
+		<property name="url" value="${crud.jdbcurl}" />
+		<property name="username" value="${crud.dbuser}" />
+		<property name="password" value="${crud.dbpass}" />
+</bean>
+
+<bean id="employeeService" class="com.imaginea.crud.service.EmployeeServiceImpl"> 
+	<property name="genericDao" ref="genericDao" />
+</bean>
+
+<bean id="genericDao" class="org.springframework.aop.framework.ProxyFactoryBean">
+	<property name="target" ref="genericDaoImpl" />
+</bean>
+
+<bean id="genericDaoImpl" class="com.imaginea.crud.dao.GenericJpaDao" />
+
+
+</beans>
