@@ -20,7 +20,7 @@ public class Employee extends AbstractEntity {
 	private String lastName;
 	private String middleName;
 	private int age;
-	private int phone;
+	private Long phone;
 	private String email;
 	
 	@Column(name="first_name")
@@ -52,10 +52,10 @@ public class Employee extends AbstractEntity {
 		this.age = age;
 	}
 	@Column(name="phone_no")
-	public int getPhone() {
+	public Long getPhone() {
 		return phone;
 	}
-	public void setPhone(int phone) {
+	public void setPhone(Long phone) {
 		this.phone = phone;
 	}
 	@Column(name="email_id")

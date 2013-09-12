@@ -26,7 +26,7 @@ public class AbstractEntity implements Serializable,IEntity {
 		return id;
 	}
 	public void setId(Long id) {
-		id = id;
+		this.id = id;
 	}
 	
 	@Column(name="isdeleted")

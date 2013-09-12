@@ -1,135 +1,261 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Employee information</title>
-<link rel="stylesheet" type="text/css" href="http://www.jeasyui.com/easyui/themes/default/easyui.css">
-	<link rel="stylesheet" type="text/css" href="http://www.jeasyui.com/easyui/themes/icon.css">
-	<link rel="stylesheet" type="text/css" href="http://www.jeasyui.com/easyui/demo/demo.css">
-	<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.min.js"></script>
-	<script type="text/javascript" src="http://www.jeasyui.com/easyui/jquery.easyui.min.js"></script>
-	<style type="text/css">
-		#fm{
-			margin:0;
-			padding:10px 30px;
-		}
-		.ftitle{
-			font-size:14px;
-			font-weight:bold;
-			color:#666;
-			padding:5px 0;
-			margin-bottom:10px;
-			border-bottom:1px solid #ccc;
-		}
-		.fitem{
-			margin-bottom:5px;
-		}
-		.fitem label{
-			display:inline-block;
-			width:80px;
-		}
-	</style>
+	<script type="text/javascript" src="<%= request.getContextPath() %>/js/jquery-1.7.js"></script>
+	<script type="text/javascript" src="<%= request.getContextPath() %>/js/jquery-ui-1.8.16.custom.min.js"></script>
+	<script type="text/javascript" src="<%= request.getContextPath() %>/js/jquery.tablesorter.js"></script>
+	<link rel="stylesheet" href="<%= request.getContextPath() %>/css/style.css" />
+	<link rel="stylesheet" href="<%=request.getContextPath()%>/css/blue/style.css" />
+	<link type="text/css" rel="stylesheet" href="<%= request.getContextPath() %>/css/jquery-ui-1.8.16.custom.css" />
+	
 <script type="text/javascript">
-
-	$(document).ready(function(){
+	var contextPath="<%=request.getContextPath()%>";
+	
+	function validateEmail(email){
+		var filter =/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+		if(filter.test(email)){
+			return true;
+		}else{
+			return false;
+		}
 		
-	})
+	}
+	
+	function validatePhone(phone) {
+		    var filter = /^[0-9-+]+$/;
+		    if (filter.test(phone)) {
+		        return true;
+		    } else {
+		        return false;
+		    }
+	}
+	
+	$(document).ready(function(){
+		$("#myDummyTable").tablesorter();
+		var rowsize_str ='<div id="tableRowSize" style="float: right;"><input type="text" class="row_size" class="small-txt-footer" value="${pageSize}"><input class="tableFooter row_size_submit" type="button" value="Go" style="cursor:pointer;font-size:12px;padding: 3px; margin: 5px;"></div>';
+		$(rowsize_str).insertBefore($('.pagebanner'));
+		
+		$("#newEmployee").live('click', function(){
+			$(".mc-title").html("New Employee");
+			$("#new-employee").show();
+			$("#employees").hide();
+			
+			 url = contextPath+'/emp/create.htm';
+		});
+		
+		$(".employee-edit").live('click', function(){
+			$(".mc-title").html("Edit Employee");
+			var id = $(this).attr("pkey");
+			
+			$("#firstName").val($(this).attr("firstName"));
+			$("#lastName").val($(this).attr("lastName"));
+			$("#phone").val($(this).attr("phone"));
+			$("#email").val($(this).attr("email"));
+			$("#new-employee").show();
+			$("#employees").hide();
+			 url = contextPath+'/emp/update.htm?employeeId='+id;
+			 
+		});
+		
+		$(".employee-del").live('click', function(){
+	       if(confirm('Do you want to delete Employee??')) {
+			var id = $(this).attr("pkey");
+			 url = contextPath+'/emp/delete.htm?employeeId='+id;
+			 $.ajax({
+					url: url,
+					type: 'GET',
+					async:false,
+					success: function( result ) {
+						if(result == 'success'){
+							$("#saving-img").hide();
+							alert('Employee Record marked as deleted');
+						}
+						
+						window.location.reload(true);
+					},
+					failure: function(data){
+					}
 
+				});
+	       }
+			 
+		});
+		
+		
+		$("#emp-save").live('click', function(){
+			var firstName = $("#firstName").val();
+			var lastName = $("#lastName").val();
+			var phone = $("#phone").val();
+			var email = $("#email").val();
+						
+			if(firstName!=null && firstName.length==0)
+			{	
+				alert("First Name is required field");
+				return false;
+			}
+			if(lastName!=null && lastName.length==0)
+			{	
+				alert("lastName is required field");
+				return false;
+			}
+			if(phone!=null && phone.length==0)
+			{	
+				alert("Contact Key is required field");
+				return false;
+			}
+			if(!validatePhone(phone) || phone.length!=10)
+			{	
+				alert("Contact is in valid");
+				return false;
+			}
+			if(email!=null && email.length==0)
+			{	
+				alert("Email Key is required field");
+				return false;
+			}
+			if(!validateEmail(email)){
+				alert('Email is not valid');
+				return false;
+			}
+			
+			$("#saving-img").show();
+			var post_data="firstName="+firstName+'&lastName='+lastName+'&phone='+phone+'&email='+email;
+			$.ajax({
+				url: url,
+				type: 'POST',
+				data:post_data,
+				async:false,
+				success: function( result ) {
+					if(result=='success'){
+						$("#saving-img").hide();
+						alert("Employee record Created/Updated Successfully");
+					}
+					
+					window.location.reload(true);
+				},
+				failure: function(result){
+					$("#saving-img").hide();
+				}
 
+			}); 
+			$("#saving-img").hide();
+		});
 
-</script>
-
-
+		
+				
+		$("#mp-cancel").live('click', function(){
+			$("#saving-img").hide();
+			$("#new-employee").hide();
+			$("#employees").show();
+		});
+		
+	});
+	</script>
 </head>
-<body>
-	<div class="demo-info" style="margin-bottom:10px">
-		<div>EMPLOYEE CRUD Application</div>
-	</div>
-	<table id="dg" title="My Users" class="easyui-datagrid" style="width:700px;height:250px"
-			toolbar="#toolbar" pagination="true"
-			rownumbers="true" fitColumns="true" singleSelect="true">
-		<thead>
-			<tr>
-				<th field="firstname" width="50">First Name</th>
-				<th field="lastname" width="50">Last Name</th>
-				<th field="phone" width="50">Phone</th>
-				<th field="email" width="50">Email</th>
-			</tr>
-		</thead>
-	</table>
-	<div id="toolbar">
-		<a href="#" id="addEmp" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newUser()">New User</a>
-		<a href="#" id="" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editUser()">Edit User</a>
-		<a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="removeUser()">Remove User</a>
-	</div>
-	<div id="dlg" class="easyui-dialog" style="width:400px;height:280px;padding:10px 20px"
-			closed="true" buttons="#dlg-buttons">
-		<div class="ftitle">User Information</div>
-		<form id="fm" method="post" novalidate>
-			<div class="fitem">
-				<label>First Name:</label>
-				<input name="firstname" class="easyui-validatebox" required="true">
-			</div>
-			<div class="fitem">
-				<label>Last Name:</label>
-				<input name="lastname" class="easyui-validatebox" required="true">
-			</div>
-			<div class="fitem">
-				<label>Phone:</label>
-				<input name="phone">
-			</div>
-			<div class="fitem">
-				<label>Email:</label>
-				<input name="email" class="easyui-validatebox" validType="email">
-			</div>
-		</form>
-	</div>
-	<div id="dlg-buttons">
-		<a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="saveUser()">Save</a>
-		<a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')">Cancel</a>
-	</div>
+<body class="wm-page">
 	<div class="main-cont">
 		<div class="wrapper">
-			<div class="mc-rounded">
-			<div class="mc-header">
-				<div>
-					<img id="addEmployee" title="Add Employee" src="<%=request.getContextPath()%>/images/plus-green.png">				
+			<div class="mc-rounded ">
+				<div id="employees">
+				
+				<div class="mc-header hidden">
+							<form id="searchSeller" action="<%= request.getContextPath() %>/emp/fetchEmpAll.htm?t=con" method="GET">
+								<input type="hidden" name="tab" value="con">
+								<input id="search" name="words" class="tgf-textbox tgf-group-title flt-left" type="text" placeholder="Search Keywords">
+								<input class="go-btn custom-btn-1" type="submit" value="Go">
+							</form>
+							<div style="padding:8px;right:5px;top:5px;float:right;position:relative;border:1px solid #ddd;">
+								<img id="newEmployee" style="margin-right:5px;" title="Add Employee"  src="<%=request.getContextPath()%>/images/plus-green.png"/>
+							</div>
 				</div>
-			</div>
-			<c:choose>
-				<c:when test="${data!=null}">
-					<table>
-						<tr>
-							<td>Employee Id</td>
-							<td>First name</td>
-							<td>Last Name</td>
-							<td>Contact</td>
-							<td>Email</td>
-							<td colspan="2"> </td>
-						</tr>
-						
-						<c:forEach items="${data}" var="emp">
-							<tr>
-								<td><c:out value="${emp.id}" /></td>
-								<td><c:out value="${emp.firstName}" /></td>
-								<td><c:out value="${emp.lastName}" /></td>
-								<td><c:out value="${emp.phone}" /></td>
-								<td><c:out value="${emp.email}" /></td>
-								<td><img title="Edit Employee"  id="editEmployee" src="<%= request.getContextPath()%>/images/pencil.png"></td>
-								<td><img title="Delete Employee" id="deleteEmployee" src="<%= request.getContextPath()%>/images/bin-img.png"></td>
-							</tr>
-						</c:forEach>
-					</table>
-				</c:when>
-				<c:otherwise>
-					<h3>No Data Found</h3>
-				</c:otherwise>
-			</c:choose>
-			
+				<div style="width:100%;" id="table-results">
+					<c:choose>
+						<c:when test="${datasize!=0}">
+							<table id="myDummyTable" class="tablesorter">
+								<thead>	
+									<tr>
+										<td>Employee Id</td>
+										<td>First Name</td>
+										<td>Last Name</td>
+										<td>Contact</td>
+										<td>Email</td>
+										<td>Is Active</td>
+										<td colspan="2"> Actions</td>
+									</tr>
+								</thead>
+								<tbody>
+								<c:forEach items="${data}" var="emp">
+									
+									<tr>
+										<td><c:out value="${emp.id}" /></td>
+										<td><c:out value="${emp.firstName}" /></td>
+										<td><c:out value="${emp.lastName}" /></td>
+										<td><c:out value="${emp.phone}" /></td>
+										<td><c:out value="${emp.email}" /></td>
+										<td><c:out value="${emp.isDeleted}" /></td>
+										<td colspan="2">
+											<div class="alloc actions">
+					               		 		<img title="Edit" pkey="${emp.id}" firstName="${emp.firstName}" lastName="${emp.lastName}" phone="${emp.phone}" email="${emp.email}" class="employee-edit" src="<%=request.getContextPath()%>/images/pencil.png"/>
+					               		 		<img  title="Delete" pkey="${emp.id}" class="employee-del" src="<%=request.getContextPath()%>/images/bin-img.png"/>
+				                			</div>								
+										</td>	
+									</tr>			       			
+						         </c:forEach>
+					            </tbody>    
+							</table>	
+						</c:when>
+						<c:otherwise>
+							<h3 class="label-4">Please click on plus symbol to add new employee</h3>
+						</c:otherwise>
+					</c:choose>
+					<c:if test=""></c:if>
+										
+				</div>
+				</div>
+				<div id="new-employee" style="display: none;">
+					<div class="mc-header">
+						<h1 class="mc-title">Configure New Employee</h1>
+					</div>
+					<div class="general-form">
+						<div class="mc-header">
+							<input id="key" value="" type="hidden"/>
+							<div class="gf-div" style="display: inline-block;width:45%;padding-top:0px!important;">
+								<h3 class="label-2">First Name</h3>
+								<input id="firstName" class="tgf-textbox" type="text"
+									placeholder="First Name" required="required">
+							</div>
+							<div class="gf-div" style="display: inline-block;width:45%;;padding-top:0px!important;">
+								<h3 class="label-2">Last Name</h3>
+								<input id="lastName" class="tgf-textbox" type="text"
+									placeholder="Last Name">
+							</div>
+							<div class="gf-div" style="display: inline-block;width:45%;;padding-top:0px!important;">
+								<h3 class="label-2">Contact</h3>
+								<input id="phone" class="tgf-textbox" type="text"
+									placeholder="Contact">
+							</div>
+							<div class="gf-div" style="display: inline-block;width:45%;;padding-top:0px!important;">
+								<h3 class="label-2">email</h3>
+								<input id="email" class="tgf-textbox" type="text"
+									placeholder="Email" required="required">
+							</div>
+						</div>
+					</div>
+					<div style="margin:10px -5px;padding-top:0px!important;float:left;" class="gf-div">
+						<input type="button" id="emp-save" class="custom-btn-2" value="Save"> 
+						<input type="button" id="mp-cancel"	class="custom-btn-1" value="Cancel">
+					</div>
+					<div id="saving-img" style="display: none;float:left;" class="message-label">
+						<span class="loading"></span><label>Saving the data...</label>
+					</div>
+					<div id="access-img" style="display: none;float:left;" class="message-label">
+						<span class="loading"></span><label>Requesting Access..</label>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

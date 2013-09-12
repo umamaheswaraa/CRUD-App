@@ -22,6 +22,8 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans
 		<property name="searchSystemEnvironment" value="true"/>
 </bean>
 	
+<bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
+
 <tx:annotation-driven transaction-manager="transactionManager"/>
 
 <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
@@ -39,6 +41,7 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans
 	</property>
 	<property name="jpaPropertyMap">
 		<map>
+			<entry key="hibernate.connection.provider_class" value="org.hibernate.connection.C3P0ConnectionProvider"/>
 			<entry key="hibernate.connection.driver_class" value="oracle.jdbc.driver.OracleDriver" />
 	        <entry key="hibernate.connection.url" value="${crud.jdbcurl}" />
 	        <entry key="hibernate.connection.username" value="${crud.dbuser}" />
@@ -56,8 +59,9 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans
 	<property name="jpaDialect">
       	<bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect"/>
     </property>
-    <property name="persistenceUnitName" value="punit"></property>  
+    <property name="persistenceUnitName" value="punit" />  
 </bean>
+
 
 <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="${crud.driverClassName}" />
@@ -75,6 +79,7 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans
 </bean>
 
 <bean id="genericDaoImpl" class="com.imaginea.crud.dao.GenericJpaDao" />
+
 
 
 </beans>
