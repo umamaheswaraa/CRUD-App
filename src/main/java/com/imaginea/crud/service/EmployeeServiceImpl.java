@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.imaginea.crud.dao.IDao;
 import com.imaginea.crud.entities.Employee;
 import com.imaginea.crud.entities.IEntity;
+import com.imaginea.crud.exception.CRUDException;
 import com.imaginea.crud.utils.Constants;
 import com.imaginea.crud.utils.CrudUtil;
 
@@ -28,14 +29,13 @@ public class EmployeeServiceImpl implements IEmployeeService {
 		this.genericDao = genericDao;
 	}
 
-	public List<Employee> fetchAllEmployees() throws Exception {
+	public List<Employee> fetchAllEmployees() throws CRUDException {
 		List<Employee> result=null;
-		try{
-			
+		try{			
 		 result = genericDao.getEntities(Employee.class, "empoyee.all");
 		}catch (Exception e) {
 			e.printStackTrace();
-			throw e;
+			throw new CRUDException("Exception while fetching All Employees :"+e.getMessage());
 		}
 		
 		return result;
@@ -68,7 +68,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
 	}
 	
 	@Transactional
-	public Long save(Employee emp) throws Exception{
+	public Long save(Employee emp) throws CRUDException{
 		Long pkey=null;
 		try{
 			logger.info("Emp Values "+emp.getFirstName());
@@ -76,13 +76,13 @@ public class EmployeeServiceImpl implements IEmployeeService {
 		}catch (Exception e) {
 			e.printStackTrace();
 			logger.error("Exception while saving the data"+e.getMessage());
-			throw e;
+			throw new CRUDException("Exception while saving Employee Data :"+e.getMessage());
 		}
 		return pkey;
 	}
 	
 	@Transactional
-	public void update(String pkey,String firstName,String lastName,String phone, String email) throws Exception {
+	public void update(String pkey,String firstName,String lastName,String phone, String email) throws CRUDException {
 		try{
 			Long lPhone=new Long(Constants.DEFAULT_PHONE);
 			Long employeeId = new Long(pkey);
@@ -100,12 +100,12 @@ public class EmployeeServiceImpl implements IEmployeeService {
 			genericDao.update(emp);
 		}catch (Exception e) {
 			logger.error("Exception while updating the Data"+e.getMessage());
-			throw e;
+			throw new CRUDException("Exception while updating Employee Data :"+e.getMessage());
 		}
 	}
 	
 	@Transactional
-	public void delete(String pkey) throws Exception {
+	public void delete(String pkey) throws CRUDException {
 		try{
 			Long employeeId = new Long(pkey);
 			Employee emp = genericDao.find(Employee.class,employeeId);
@@ -116,7 +116,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
 			genericDao.update(emp);
 		}catch (Exception e) {
 			logger.error("Exception while deleting the Data"+e.getMessage());
-			throw e;
+			throw new CRUDException("Exception while Deleting Employee Data :"+e.getMessage());
 		}
 	}
 	
