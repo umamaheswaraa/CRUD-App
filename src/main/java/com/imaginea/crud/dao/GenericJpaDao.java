@@ -12,9 +12,9 @@ import javax.persistence.Query;
 import org.hibernate.exception.DataException;
 import org.springframework.dao.DataAccessException;
 
-import com.imaginea.crud.entities.IEntity;
+import com.imaginea.crud.entities.Entity;
 
-public class GenericJpaDao<E extends IEntity, K extends Serializable> implements IDao<E, K> {
+public class GenericJpaDao<E extends Entity, K extends Serializable> implements Dao<E, K> {
 	
 	protected EntityManager entityManager;
 
@@ -28,7 +28,7 @@ public class GenericJpaDao<E extends IEntity, K extends Serializable> implements
 	}
 
 	
-	public <E extends IEntity, obj> List<E> getEntities(
+	public <E extends Entity, obj> List<E> getEntities(
 			Class<E> inElementClass, String queryName) throws DataAccessException {
 		Object result =null;
 		
@@ -38,7 +38,7 @@ public class GenericJpaDao<E extends IEntity, K extends Serializable> implements
 		return (List<E>) result;
 	}
 
-	public <E extends IEntity, obj> E getEntity(Class<E> inElementClass,
+	public <E extends Entity, obj> E getEntity(Class<E> inElementClass,
 			String queryName, Hashtable<String, obj> criteria)
 			throws DataAccessException {
 		Object result=null;
@@ -65,12 +65,12 @@ public class GenericJpaDao<E extends IEntity, K extends Serializable> implements
 		
 	}
 
-	public <E extends IEntity> E update(E inEntity) throws DataAccessException {			
+	public <E extends Entity> E update(E inEntity) throws DataAccessException {			
 			
 			return entityManager.merge(inEntity);		
 	}	
 	
-	public <E extends IEntity> E find(Class<E> inElementClass, Long pkey) throws DataException{
+	public <E extends Entity> E find(Class<E> inElementClass, Long pkey) throws DataException{
 		
 		return entityManager.find(inElementClass, pkey);
 	}

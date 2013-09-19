@@ -5,7 +5,7 @@ import java.util.List;
 import com.imaginea.crud.entities.Employee;
 import com.imaginea.crud.exception.CRUDException;
 
-public interface IEmployeeService {
+public interface EmployeeService {
 
 	public List<Employee> fetchAllEmployees()throws CRUDException;
 	public Employee setEmployee(String firstName, String lastName, String phone, String email);

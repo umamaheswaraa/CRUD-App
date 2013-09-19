@@ -12,7 +12,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.imaginea.crud.entities.Employee;
-import com.imaginea.crud.service.IEmployeeService;
+import com.imaginea.crud.service.EmployeeService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={"/applicationContext.xml"})
@@ -20,7 +20,7 @@ public class EmployeeServiceTest {
 	
 	private static Logger logger = LoggerFactory.getLogger(EmployeeServiceTest.class);
 	@Autowired
-	IEmployeeService employeeService;
+	EmployeeService employeeService;
 
 	@Test
 	public void fetchAllEmployees()

@@ -70,7 +70,7 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans
 		<property name="password" value="${crud.dbpass}" />
 </bean>
 
-<bean id="employeeService" class="com.imaginea.crud.service.EmployeeServiceImpl"> 
+<bean id="employeeService" class="com.imaginea.crud.service.impl.EmployeeServiceImpl"> 
 	<property name="genericDao" ref="genericDao" />
 </bean>
 

@@ -1,4 +1,4 @@
-package com.imaginea.crud.service;
+package com.imaginea.crud.service.impl;
 
 import java.util.Date;
 import java.util.List;
@@ -7,38 +7,39 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.imaginea.crud.dao.IDao;
+import com.imaginea.crud.dao.Dao;
 import com.imaginea.crud.entities.Employee;
-import com.imaginea.crud.entities.IEntity;
+import com.imaginea.crud.entities.Entity;
 import com.imaginea.crud.exception.CRUDException;
+import com.imaginea.crud.service.EmployeeService;
 import com.imaginea.crud.utils.Constants;
 import com.imaginea.crud.utils.CrudUtil;
 
-public class EmployeeServiceImpl implements IEmployeeService {
+public class EmployeeServiceImpl implements EmployeeService {
 
 	private static final Logger logger = LoggerFactory.getLogger(EmployeeServiceImpl.class);
 
 	
-	IDao<IEntity, Long> genericDao;
+	Dao<Entity, Long> genericDao;
 
-	public IDao<IEntity, Long> getGenericDao() {
+	public Dao<Entity, Long> getGenericDao() {
 		return genericDao;
 	}
 
-	public void setGenericDao(IDao<IEntity, Long> genericDao) {
+	public void setGenericDao(Dao<Entity, Long> genericDao) {
 		this.genericDao = genericDao;
 	}
 
 	public List<Employee> fetchAllEmployees() throws CRUDException {
-		List<Employee> result=null;
+		List<Employee> employees=null;
 		try{			
-		 result = genericDao.getEntities(Employee.class, "empoyee.all");
+			employees = genericDao.getEntities(Employee.class, "empoyee.all");
 		}catch (Exception e) {
 			e.printStackTrace();
 			throw new CRUDException("Exception while fetching All Employees :"+e.getMessage());
 		}
 		
-		return result;
+		return employees;
 	}
 	
 	public Employee setEmployee(String firstName, String lastName, String phone, String email)

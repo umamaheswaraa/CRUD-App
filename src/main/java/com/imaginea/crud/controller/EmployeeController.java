@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.imaginea.crud.entities.Employee;
-import com.imaginea.crud.service.IEmployeeService;
+import com.imaginea.crud.service.EmployeeService;
 
 @Controller
 @RequestMapping("emp")
@@ -20,14 +20,14 @@ public class EmployeeController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(EmployeeController.class);
 
-	IEmployeeService employeeService;
+	EmployeeService employeeService;
 
 
-	public IEmployeeService getEmployeeService() {
+	public EmployeeService getEmployeeService() {
 		return employeeService;
 	}
 
-	public void setEmployeeService(IEmployeeService employeeService) {
+	public void setEmployeeService(EmployeeService employeeService) {
 		this.employeeService = employeeService;
 	}
 	
@@ -35,18 +35,18 @@ public class EmployeeController {
 	public ModelAndView fetchAllEmployees(){
 		ModelAndView view = new ModelAndView("jsp/employeeInfo");
 		int datasize=0;
-		List<Employee> list=null;
+		List<Employee> employees=null;
 		try {
-			list = employeeService.fetchAllEmployees();
-			if(list!=null && list.size()>0)
+			employees = employeeService.fetchAllEmployees();
+			if(employees!=null && employees.size()>0)
 			{
-				datasize=list.size();
+				datasize=employees.size();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		view.addObject("data", list);
+		view.addObject("data", employees);
 		view.addObject("datasize", datasize);
 		
 		return view;		
