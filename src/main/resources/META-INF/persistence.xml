@@ -5,11 +5,7 @@
 	
 	<persistence-unit name="punit">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
-    	<validation-mode>NONE</validation-mode>
-    	<properties>
-    	  <property name="hibernate.validator.autoregister_listeners" value="false"/>
-    	  <property name="hibernate.validator.apply_to_ddl" value="false"/>
-    	</properties>
+    	<validation-mode>NONE</validation-mode>    	
 	</persistence-unit>
 
 </persistence>
