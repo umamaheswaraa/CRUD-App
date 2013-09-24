@@ -97,4 +97,14 @@ public class EmployeeServiceTest {
 			Assert.fail(e.getMessage());
 		}
 	}
+	
+	@Test
+	public void deleteEmployeeForFailure()
+	{
+		try{
+			employeeService.delete("asdas");
+			
+		}catch (Exception e) {
+		}
+	}
 }

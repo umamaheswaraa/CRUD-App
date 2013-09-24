@@ -15,6 +15,7 @@
   		<org.logback.version>0.9.28</org.logback.version>
   		<junit.version>4.10</junit.version>
 		<slf4jVersion>1.6.1</slf4jVersion>
+		<aspectjrt.version>1.6.11</aspectjrt.version>
   </properties>
   
   <dependencies>
@@ -132,6 +133,19 @@
 		<groupId>ch.qos.logback</groupId>
 		<artifactId>logback-core</artifactId>
 		<version>${org.logback.version}</version>
+	</dependency>
+	
+	<!-- aspectj -->
+	<dependency>
+		<groupId>org.aspectj</groupId>
+		<artifactId>aspectjrt</artifactId>
+		<version>${aspectjrt.version}</version>
+	</dependency>
+
+	<dependency>
+		<groupId>org.aspectj</groupId>
+		<artifactId>aspectjweaver</artifactId>
+		<version>${aspectjrt.version}</version>
 	</dependency>
 		
   </dependencies>

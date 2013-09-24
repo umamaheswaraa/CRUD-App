@@ -10,8 +10,7 @@
 		http://www.springframework.org/schema/mvc
 		http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
 
-	<mvc:annotation-driven/>
-
+	<context:annotation-config />
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="/" />
 		<property name="suffix" value=".jsp" />
@@ -28,6 +27,5 @@
 		<property name="searchSystemEnvironment" value="true"/>
 	</bean>
 	<bean class="com.imaginea.crud.controller.EmployeeController" id="employeeController">
-		<property name="employeeService" ref="employeeService" />
 	</bean>
 </beans>
