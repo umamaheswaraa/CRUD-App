@@ -15,6 +15,10 @@ import org.springframework.web.servlet.ModelAndView;
 import com.imaginea.crud.entities.Employee;
 import com.imaginea.crud.service.EmployeeService;
 
+/**
+ * @author umamaheswaraa
+ *
+ */
 @Controller
 @RequestMapping("emp")
 public class EmployeeController {
@@ -32,7 +36,11 @@ public class EmployeeController {
 	public void setEmployeeService(EmployeeService employeeService) {
 		this.employeeService = employeeService;
 	}
-	
+	/**
+	 * This method is to fetch all the employee records
+	 * @return ModelAndView
+	 *
+	 */
 	@RequestMapping(value="/fetchEmpAll", method=RequestMethod.GET)
 	public ModelAndView fetchAllEmployees(){
 		ModelAndView view = new ModelAndView("jsp/employeeInfo");
@@ -54,6 +62,15 @@ public class EmployeeController {
 		return view;		
 	}
 	
+	/**
+	 * This method is to create an employee record
+	 * @param firstName
+	 * @param lastName
+	 * @param phone
+	 * @param email
+	 * @return ModelAndView
+	 *
+	 */
 	@RequestMapping(value="/create", method=RequestMethod.POST)
 	public @ResponseBody String creatEmployee(@RequestParam("firstName") String firstName, 
 			@RequestParam("lastName") String lastName, @RequestParam("phone") String phone, 
@@ -72,6 +89,16 @@ public class EmployeeController {
 			return result;
 	}
 	
+	/**
+	 * This method is to update an employee record
+	 * @param pkey
+	 * @param firstName
+	 * @param lastName
+	 * @param phone
+	 * @param email
+	 * @return String
+	 *
+	 */
 	@RequestMapping(value="/update", method=RequestMethod.POST)
 	public @ResponseBody String updateEmployee(@RequestParam("employeeId") String pkey, @RequestParam("firstName") String firstName,
 			@RequestParam("lastName") String lastName, @RequestParam("phone") String phone, @RequestParam("email") String email){
@@ -88,6 +115,12 @@ public class EmployeeController {
 		return result;
 	}
 	
+	/**
+	 * This method is to delete an employee record
+	 * @param pkey
+	 * @return String
+	 *
+	 */
 	@RequestMapping(value="delete", method=RequestMethod.GET)
 	public @ResponseBody String deleteEmployee(@RequestParam("employeeId") String pkey){
 		String result=null;

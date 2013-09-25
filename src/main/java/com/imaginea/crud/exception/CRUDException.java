@@ -1,5 +1,9 @@
 package com.imaginea.crud.exception;
 
+/**
+ * @author umamaheswaraa
+ *
+ */
 public class CRUDException extends Exception {
 
 	private static final long serialVersionUID = -6709003962271214129L;

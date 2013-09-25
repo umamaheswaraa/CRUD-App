@@ -8,6 +8,10 @@ import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * @author umamaheswaraa
+ *
+ */
 @MappedSuperclass
 public class AbstractEntity implements Serializable,Entity {
 

@@ -7,6 +7,10 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 
+/**
+ * @author umamaheswaraa
+ *
+ */
 @Entity
 @Table(name="employee")
 @NamedQueries({

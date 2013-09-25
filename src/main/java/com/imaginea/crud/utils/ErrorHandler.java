@@ -6,8 +6,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.imaginea.crud.exception.CRUDException;
-
 
 @Aspect
 public class ErrorHandler {
@@ -19,9 +17,7 @@ public class ErrorHandler {
 	{
 		try{
 			logger.error("logging to test Point cut"+throwable.getMessage());
-			if(throwable instanceof CRUDException){
-					logger.error("Failed Due to :"+throwable.getLocalizedMessage());
-			}
+			//To Add Business Logic
 		}catch (Exception e) {
 			e.printStackTrace();
 		}

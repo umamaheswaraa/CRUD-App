@@ -14,6 +14,10 @@ import org.springframework.dao.DataAccessException;
 
 import com.imaginea.crud.entities.Entity;
 
+/**
+ * @author umamaheswaraa
+ *
+ */
 public class GenericJpaDao<E extends Entity, K extends Serializable> implements Dao<E, K> {
 	
 	protected EntityManager entityManager;
@@ -22,12 +26,21 @@ public class GenericJpaDao<E extends Entity, K extends Serializable> implements 
 		return entityManager;
 	}
 
+	/**
+	 * @param entityManager
+	 */
 	@PersistenceContext
 	public void setEntityManager(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
 
-	
+	/**
+	 * Get list of entities
+	 * @param inElementClass
+	 * @param queryName
+	 * @return List<E>
+	 * @throws DataAccessException
+	 */
 	public <E extends Entity, obj> List<E> getEntities(
 			Class<E> inElementClass, String queryName) throws DataAccessException {
 		Object result =null;
@@ -38,6 +51,14 @@ public class GenericJpaDao<E extends Entity, K extends Serializable> implements 
 		return (List<E>) result;
 	}
 
+	/**
+	 * Get single entity
+	 * @param inElementClass
+	 * @param queryName
+	 * @param criteria
+	 * @return E
+	 * @throws DataAccessException
+	 */
 	public <E extends Entity, obj> E getEntity(Class<E> inElementClass,
 			String queryName, Hashtable<String, obj> criteria)
 			throws DataAccessException {
@@ -59,17 +80,36 @@ public class GenericJpaDao<E extends Entity, K extends Serializable> implements 
 		return (E) result;
 	}
 
+	/**
+	 * Save an entity in DB
+	 * @param inEntity
+	 * @return Long
+	 * @throws DataAccessException
+	 */
 	public Long save(E inEntity) throws DataAccessException {		
 			entityManager.persist(inEntity);
 			return (Long) entityManager.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(inEntity);
 		
 	}
 
+	/**
+	 * Update an entity in DB
+	 * @param inEntity
+	 * @return E
+	 * @throws DataAccessException
+	 */
 	public <E extends Entity> E update(E inEntity) throws DataAccessException {			
 			
 			return entityManager.merge(inEntity);		
 	}	
 	
+	/**
+	 * Get an entity based on pkey from DB
+	 * @param inElementClass
+	 * @param pkey
+	 * @return E
+	 * @throws DataAccessException
+	 */
 	public <E extends Entity> E find(Class<E> inElementClass, Long pkey) throws DataException{
 		
 		return entityManager.find(inElementClass, pkey);

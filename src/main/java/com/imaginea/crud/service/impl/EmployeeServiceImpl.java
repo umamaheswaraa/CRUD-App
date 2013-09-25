@@ -15,6 +15,10 @@ import com.imaginea.crud.service.EmployeeService;
 import com.imaginea.crud.utils.Constants;
 import com.imaginea.crud.utils.CrudUtil;
 
+/**
+ * @author umamaheswaraa
+ *
+ */
 public class EmployeeServiceImpl implements EmployeeService {
 
 	private static final Logger logger = LoggerFactory.getLogger(EmployeeServiceImpl.class);
@@ -30,6 +34,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 		this.genericDao = genericDao;
 	}
 
+	/**
+	 * This method will fetch the list of employee records
+	 * @return employees
+	 * @throws CRUDException
+	 *
+	 */
 	public List<Employee> fetchAllEmployees() throws CRUDException {
 		List<Employee> employees=null;
 		try{			
@@ -42,6 +52,15 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return employees;
 	}
 	
+	/**
+	 * This method will set values for employee object
+	 * @param firstName
+	 * @param lastName
+	 * @param phone
+	 * @param email
+	 * @return employee
+	 *
+	 */
 	public Employee setEmployee(String firstName, String lastName, String phone, String email)
 	{
 		Date today = CrudUtil.getCurrentTime();
@@ -67,7 +86,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 		}
 		return emp;
 	}
-	
+
+	/**
+	 * This method will save the employee record
+	 * @param emp
+	 * @return pkey
+	 * @throws CRUDException
+	 *
+	 */
 	@Transactional
 	public Long save(Employee emp) throws CRUDException{
 		Long pkey=null;
@@ -82,6 +108,15 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return pkey;
 	}
 	
+	/**
+	 * This method will update the employee record
+	 * @param firstName
+	 * @param lastName
+	 * @param phone
+	 * @param email
+	 * @throws CRUDException
+	 *
+	 */
 	@Transactional
 	public void update(String pkey,String firstName,String lastName,String phone, String email) throws CRUDException {
 		try{
@@ -105,6 +140,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 		}
 	}
 	
+	/**
+	 * This method will delete the employee record
+	 * @param pkey
+	 * @throws CRUDException
+	 *
+	 */
 	@Transactional
 	public void delete(String pkey) throws CRUDException {
 		try{
